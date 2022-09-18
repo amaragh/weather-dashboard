@@ -9,6 +9,9 @@ var currentTempEl = document.querySelector("#current-temp");
 var currentHumidEl = document.querySelector("#current-humid");
 var currentWindEl = document.querySelector("#current-wind");
 
+var forecastContainerEl = document.querySelector(".forecast-weather");
+
+var cities = [];
 
 // function to get city coordinates
 var getCityCoords = function (city) {
@@ -20,6 +23,7 @@ var getCityCoords = function (city) {
                 console.log(data);
                 var latitude = data.coord.lat;
                 var longitude = data.coord.lon;
+                var city = data.name;
                 // function to extract current day weather
                 getCurrentWeather(data);
                 // function to call other api with the coordinates as query parameters
@@ -29,6 +33,7 @@ var getCityCoords = function (city) {
         } else {
             alert("Error: City Not Found. Please enter a valid city name.")
         }
+        cities.push(city);
     });
 };
 
@@ -59,8 +64,8 @@ var getCurrentWeather = function (data) {
     // convert unix timecode to today's date in US format
     var date = new Date(data.dt * 1000).toLocaleDateString("en-US");
 
-    cityNameEl.textContent = city;
-    currentDateEl.textContent = date;
+    cityNameEl.textContent = city + " " + date ;
+    // currentDateEl.textContent = date;
     weatherIconEl.setAttribute("href", "./assets/images/800.png");
 
     currentTempEl.textContent = "Temp = " + temperature + "°F";
@@ -89,20 +94,56 @@ var callForecastApi = function (latitude, longitude) {
     })
 }
 
-var getForecast = function(data) {
-    // the api returns 8 timestamps for each of the 5 days. Each number in the array represents 3PM for each fo the 5 days
-    var indices = [3, 11,19, 27, 35];
+var getForecast = function (data) {
+    // The api returns 8 timestamps, 3 hours apart, for each of the 5 days. 
+    // Each number in the array represents 3PM for each of the 5 days
+    var indices = [3, 11, 19, 27, 35];
 
     for (var i = 0; i < indices.length; i++) {
         var index = indices[i];
 
-        var date = data.list[index].dt;
-        console.log(date);
-        // new Date(data.dt * 1000).toLocaleDateString("en-US");
+        var date = new Date(data.list[index].dt * 1000).toLocaleDateString("en-US");
+        var weather = data.list[index].weather.id;
+        var temperature = data.list[index].main.temp;
+        var windSpeed = data.list[index].wind.speed;
+        var humidity = data.list[index].main.humidity;
 
+        var forecastDayEl = document.createElement("div");
+        $(forecastDayEl).addClass("col");
+
+        var dateEl = document.createElement("p");
+        dateEl.textContent = date;
+        
+
+        var weatherEl = document.createElement("p");
+        // weatherIconEl.setAttribute("href", "./assets/images/800.png");
+        
+        var tempEl = document.createElement("p");
+        tempEl.textContent = "Temp = " + temperature + "°F";
+
+        var windEl = document.createElement("p");
+        windEl.textContent = "Wind = " + windSpeed + " MPH";
+
+        var humidEl = document.createElement("p");
+        humidEl.textContent = "Humidity = " + humidity + "%";
+
+
+        forecastDayEl.appendChild(dateEl);
+        forecastDayEl.appendChild(weatherEl);
+        forecastDayEl.appendChild(tempEl);
+        forecastDayEl.appendChild(windEl);
+        forecastDayEl.appendChild(humidEl);
+
+
+        forecastContainerEl.appendChild(forecastDayEl);
 
 
     }
+}
+
+var saveCities = function() {
+    localStorage.setItem("cities", JSON.stringify(cities));
+
 }
 
 searchFormEl.addEventListener("submit", formSubmitHandler);
