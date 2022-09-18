@@ -23,12 +23,13 @@
         <section class="row ">
             <div class="col-12 col-md-3 col-lg-3">
                 <!-- input form to collect city name -->
-                <div>
-                    <h3>Search for a City:</h3>
-                    <form id="search-form">
-                        <input type="text" name="city" id="city" placeholder="Houston" />
-                        <button class="btn" type="submit">Submit</button>
+                <div id="search-container" class="container">
+                    <h3 class="row">Search for a City:</h3>
+                    <form id="search-form" class="row">
+                        <input type="text" name="city" id="city" placeholder="Houston" class="rounded" />
+                        <button type="submit" class="btn-primary btn-block rounded">Search</button>
                     </form>
+
                 </div>
                 <!-- section to display historical searches -->
                 <div id="historical-searches">

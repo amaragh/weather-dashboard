@@ -1,6 +1,8 @@
 var searchFormEl = document.querySelector("#search-form");
 var cityInputEl = document.querySelector("#city");
 
+var searchContainerEl = document.querySelector("#search-container");
+
 var historicalSearchesEl = document.querySelector("#historical-searches");
 
 var cityNameEl = document.querySelector("#city-name");
@@ -62,8 +64,6 @@ var formSubmitHandler = function (event) {
 
 }
 var addHistoricalSearch = function (city) {
-    console.log("historical searches");
-    
 
     var cityId = city.replace(" ", "-");
     var existingBtnEl = document.querySelector(`#${cityId}`);
@@ -73,11 +73,11 @@ var addHistoricalSearch = function (city) {
         var historicalBtnEl = document.createElement("button")
         historicalBtnEl.setAttribute("id", cityId);
         historicalBtnEl.textContent = city;
+        historicalBtnEl.classList = "rounded";
         // add new button as first child so it appears as the first button in the historical search list
         historicalSearchesEl.insertBefore(historicalBtnEl, historicalSearchesEl.firstChild);
+        
     }
-
-    console.log(historicalSearchesEl);
 }
 
 var getCurrentWeather = function (data) {
@@ -92,16 +92,13 @@ var getCurrentWeather = function (data) {
     // convert unix timecode to today's date in US format
     var date = new Date(data.dt * 1000).toLocaleDateString("en-US");
 
-    cityNameEl.textContent = city + " " + date;
+    cityNameEl.textContent = city + " (" + date + ")";
     // currentDateEl.textContent = date;
     weatherIconEl.setAttribute("href", "./assets/images/800.png");
 
     currentTempEl.textContent = "Temp = " + temperature + "°F";
     currentWindEl.textContent = "Wind = " + windSpeed + " MPH";
     currentHumidEl.textContent = "Humidity = " + humidity + "%";
-
-    // console.log(city, weather, temperature, humidity, windSpeed);
-
 
 };
 
@@ -134,7 +131,7 @@ var getForecast = function (data) {
         var index = indices[i];
 
         var date = new Date(data.list[index].dt * 1000).toLocaleDateString("en-US");
-        var weather = data.list[index].weather.id;
+        var weather = data.list[index].weather[0].main;
         var temperature = data.list[index].main.temp;
         var windSpeed = data.list[index].wind.speed;
         var humidity = data.list[index].main.humidity;
@@ -147,6 +144,7 @@ var getForecast = function (data) {
 
 
         var weatherEl = document.createElement("p");
+        weatherEl.classList = `icon ${weather}`;
         // weatherIconEl.setAttribute("href", "./assets/images/800.png");
 
         var tempEl = document.createElement("p");
@@ -196,11 +194,8 @@ searchFormEl.addEventListener("submit", formSubmitHandler);
 
 historicalSearchesEl.addEventListener("click", function (event) {
     var city = event.target.textContent;
-    console.log(city);
     getCityCoords(city);
-
 })
 
+// when page is opened, load hitorical searches as available buttons
 loadCities();
-
-// getCityCoords("Houston");

@@ -1,0 +1,56 @@
+:root {
+    --dark-color: rgb(0, 0, 139);
+    --forecast-color: rgb(164, 139, 235);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+header {
+    background-color: var(--dark-color);
+    margin: 5px;
+}
+
+header h1 {
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+button {
+    text-align: center;
+}
+
+input,
+button {
+    width: 100%;
+}
+
+#search-container {
+    border-bottom: 2px solid darkgray;
+}
+#search-container h3 {
+font-weight: bold;}
+
+#search-form input {
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 1px solid darkgray;
+}
+
+#search-form button {
+    padding: 3px;
+    margin-bottom: 15px;
+    border: 1px solid darkgray;
+}
+
+#historical-searches button {
+    margin-top: 15px;
+    padding: 4px;
+    border: 1px solid darkgray;
+
+}
