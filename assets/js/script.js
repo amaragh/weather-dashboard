@@ -5,6 +5,8 @@ var searchContainerEl = document.querySelector("#search-container");
 
 var historicalSearchesEl = document.querySelector("#historical-searches");
 
+var currentWeatherEl = document.querySelector(".current-weather");
+
 var cityNameEl = document.querySelector("#city-name");
 var currentDateEl = document.querySelector("#current-date");
 var weatherIconEl = document.querySelector(".weather-icon");
@@ -13,6 +15,7 @@ var currentTempEl = document.querySelector("#current-temp");
 var currentHumidEl = document.querySelector("#current-humid");
 var currentWindEl = document.querySelector("#current-wind");
 
+var forecastContainerParentEl = document.querySelector("#forecast-container");
 var forecastContainerEl = document.querySelector(".forecast-weather");
 
 var cities = [];
@@ -24,15 +27,24 @@ var getCityCoords = function (city) {
     fetch(apiUrl).then(function (response) {
         if (response.ok) {
             response.json().then(function (data) {
-                console.log(data);
                 var latitude = data.coord.lat;
                 var longitude = data.coord.lon;
-                var city = data.name;
+
+
                 // function to extract current day weather
                 getCurrentWeather(data);
                 // function to call other api with the coordinates as query parameters
                 callForecastApi(latitude, longitude);
 
+                // add city name to array if not present and sve to localStorage
+                var city = data.name;
+                if (!cities.includes(city)) {
+                    cities.push(city);
+                }
+                saveCities();
+
+                // add historical sarch button
+                addHistoricalSearch(city);
 
             })
         } else {
@@ -41,11 +53,9 @@ var getCityCoords = function (city) {
 
 
     });
-    cities.push(city);
 
-    addHistoricalSearch(city);
 
-    saveCities();
+
 };
 
 
@@ -71,20 +81,19 @@ var addHistoricalSearch = function (city) {
     // only add button if it does not already exist for that city
     if (!existingBtnEl) {
         var historicalBtnEl = document.createElement("button")
-        historicalBtnEl.setAttribute("id", cityId);
         historicalBtnEl.textContent = city;
+        historicalBtnEl.setAttribute("id", cityId);
         historicalBtnEl.classList = "rounded";
         // add new button as first child so it appears as the first button in the historical search list
         historicalSearchesEl.insertBefore(historicalBtnEl, historicalSearchesEl.firstChild);
-        
+
     }
 }
 
 var getCurrentWeather = function (data) {
-    // console.log("get current weather");
 
     var city = data.name;
-    var weather = data.weather[0].id;
+    var weather = data.weather[0].main;
     var temperature = data.main.temp;
     var humidity = data.main.humidity;
     var windSpeed = data.wind.speed;
@@ -94,19 +103,21 @@ var getCurrentWeather = function (data) {
 
     cityNameEl.textContent = city + " (" + date + ")";
     // currentDateEl.textContent = date;
-    weatherIconEl.setAttribute("href", "./assets/images/800.png");
+    var weatherClass = getWeatherClass(weather);
+    weatherIconEl.classList = `icon ${weatherClass}`;
+
 
     currentTempEl.textContent = "Temp = " + temperature + "°F";
     currentWindEl.textContent = "Wind = " + windSpeed + " MPH";
     currentHumidEl.textContent = "Humidity = " + humidity + "%";
 
+    currentWeatherEl.setAttribute("style", "display:'';")
+
 };
 
 var callForecastApi = function (latitude, longitude) {
-    console.log("latitude", latitude, "longitude", longitude);
 
     var apiUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&appid=718908fbd7f74c0aac0bd0ff69325a23&units=imperial";
-    console.log(apiUrl);
 
     fetch(apiUrl).then(function (response) {
         if (response.ok) {
@@ -143,9 +154,10 @@ var getForecast = function (data) {
         dateEl.textContent = date;
 
 
-        var weatherEl = document.createElement("p");
-        weatherEl.classList = `icon ${weather}`;
-        // weatherIconEl.setAttribute("href", "./assets/images/800.png");
+
+        var weatherEl = document.createElement("i");
+        var weatherClass = getWeatherClass(weather);
+        weatherEl.classList = `icon ${weatherClass}`;
 
         var tempEl = document.createElement("p");
         tempEl.textContent = "Temp = " + temperature + "°F";
@@ -166,6 +178,29 @@ var getForecast = function (data) {
         forecastContainerEl.appendChild(forecastDayEl);
 
     }
+    forecastContainerParentEl.setAttribute("style", "display:'';");
+
+
+}
+
+var getWeatherClass = function (weather) {
+    switch (weather) {
+        case "Clouds":
+            weatherClass = "fa fa-cloud";
+            break;
+        case "Clear":
+            weatherClass = "fa fa-sun";
+            break;
+
+        case "Rain":
+            weatherClass = "fa fa-cloud-rain";
+            break;
+        case "Snow":
+            weatherClass = "fa-snowflake";
+            break;
+    }
+
+    return weatherClass;
 }
 
 // save searched cities to localStorage
@@ -197,5 +232,5 @@ historicalSearchesEl.addEventListener("click", function (event) {
     getCityCoords(city);
 })
 
-// when page is opened, load hitorical searches as available buttons
+// when page is opened, load historical searches as available buttons
 loadCities();

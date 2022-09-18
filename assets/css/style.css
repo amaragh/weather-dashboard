@@ -45,7 +45,7 @@ font-weight: bold;}
 #search-form button {
     padding: 3px;
     margin-bottom: 15px;
-    border: 1px solid darkgray;
+    /* border: 1px solid darkgray; */
 }
 
 #historical-searches button {
@@ -53,4 +53,24 @@ font-weight: bold;}
     padding: 4px;
     border: 1px solid darkgray;
 
+}
+
+.current-weather {
+    border: solid 1px darkgray;
+}
+
+.icon {
+    /* background-color: black; */
+}
+
+.fa-sun {
+    color: orange;
+}
+
+.fa-cloud {
+    color: darkslategrey;
+}
+
+.fa-cloud-rain {
+    color: blue;
 }
