@@ -90,6 +90,8 @@ var addHistoricalSearch = function (city) {
     }
 }
 
+
+
 var getCurrentWeather = function (data) {
 
     var city = data.name;
@@ -102,15 +104,15 @@ var getCurrentWeather = function (data) {
     var date = new Date(data.dt * 1000).toLocaleDateString("en-US");
 
     cityNameEl.textContent = city + " (" + date + ")";
-    // currentDateEl.textContent = date;
-    var weatherClass = getWeatherClass(weather);
-    weatherIconEl.classList = `icon ${weatherClass}`;
 
+    var weatherClass = getWeatherClass(weather);
+    weatherIconEl.classList = `weather-icon ${weatherClass}`;
 
     currentTempEl.textContent = "Temp = " + temperature + "°F";
     currentWindEl.textContent = "Wind = " + windSpeed + " MPH";
     currentHumidEl.textContent = "Humidity = " + humidity + "%";
 
+    // display container once populated
     currentWeatherEl.setAttribute("style", "display:'';")
 
 };
@@ -148,12 +150,12 @@ var getForecast = function (data) {
         var humidity = data.list[index].main.humidity;
 
         var forecastDayEl = document.createElement("div");
-        $(forecastDayEl).addClass("col");
+        forecastDayEl.classList = "col forecast-day"
+        // $(forecastDayEl).addClass("col");
 
         var dateEl = document.createElement("p");
         dateEl.textContent = date;
-
-
+        dateEl.classList = "forecast-date";
 
         var weatherEl = document.createElement("i");
         var weatherClass = getWeatherClass(weather);
@@ -178,25 +180,29 @@ var getForecast = function (data) {
         forecastContainerEl.appendChild(forecastDayEl);
 
     }
+    // display container once populated
     forecastContainerParentEl.setAttribute("style", "display:'';");
-
-
 }
 
 var getWeatherClass = function (weather) {
     switch (weather) {
-        case "Clouds":
-            weatherClass = "fa fa-cloud";
-            break;
         case "Clear":
             weatherClass = "fa fa-sun";
             break;
-
+        case "Clouds":
+            weatherClass = "fa fa-cloud";
+            break;
         case "Rain":
-            weatherClass = "fa fa-cloud-rain";
+            weatherClass = "fa fa-cloud-showers-heavy";
+            break;
+        case "Drizzle":
+            weatherClass = "fa fa-cloud-sun-rain";
+            break;
+        case "Thunderstorm":
+            weatherClass = "fa fa-cloud-bolt";
             break;
         case "Snow":
-            weatherClass = "fa-snowflake";
+            weatherClass = "fa fa-snowflake";
             break;
     }
 

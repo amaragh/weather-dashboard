@@ -1,6 +1,6 @@
 :root {
     --dark-color: rgb(0, 0, 139);
-    --forecast-color: rgb(164, 139, 235);
+    --forecast-color: rgb(26,76,128);
 }
 
 * {
@@ -33,8 +33,10 @@ button {
 #search-container {
     border-bottom: 2px solid darkgray;
 }
+
 #search-container h3 {
-font-weight: bold;}
+    font-weight: bold;
+}
 
 #search-form input {
     padding: 5px;
@@ -57,10 +59,48 @@ font-weight: bold;}
 
 .current-weather {
     border: solid 1px darkgray;
+    padding: 5px;
+    margin-bottom: 20px;
+}
+
+#current-weather-header {
+    margin-bottom: 15px;
+}
+
+#city-name {
+    display: inline;
+    font-weight: bold;
+    /* padding-right: 5px; */
+}
+
+.weather-icon {
+    padding-bottom: 10px;
+
+}
+
+#forecast-container {
+    padding: 0;
+}
+
+.forecast-day {
+    background-color: var(--forecast-color);
+    color: white;
+    /* margin-right: 5px; */
+    padding: 10px;
+    /* padding-left: 0;
+    padding-right: 0; */
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+
+.forecast-date {
+    font-weight: bold;
+    margin-bottom: 0;
 }
 
 .icon {
-    /* background-color: black; */
+    margin: 10px 0;
 }
 
 .fa-sun {
@@ -68,9 +108,20 @@ font-weight: bold;}
 }
 
 .fa-cloud {
-    color: darkslategrey;
+    color: gray;
 }
 
-.fa-cloud-rain {
-    color: blue;
+.fa-cloud-showers-heavy {
+    color: slategray;
 }
+
+.fa-cloud-sun-rain {
+    color: darkslategray;
+}
+.fa-cloud-bolt {
+    color: darkslategray;
+}
+.fa-snowflake {
+    color: white;
+}
+
