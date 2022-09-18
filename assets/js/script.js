@@ -64,13 +64,16 @@ var formSubmitHandler = function (event) {
 var addHistoricalSearch = function (city) {
     console.log("historical searches");
     
+
     var cityId = city.replace(" ", "-");
     var existingBtnEl = document.querySelector(`#${cityId}`);
 
+    // only add button if it does not already exist for that city
     if (!existingBtnEl) {
         var historicalBtnEl = document.createElement("button")
         historicalBtnEl.setAttribute("id", cityId);
         historicalBtnEl.textContent = city;
+        // add new button as first child so it appears as the first button in the historical search list
         historicalSearchesEl.insertBefore(historicalBtnEl, historicalSearchesEl.firstChild);
     }
 
@@ -167,8 +170,26 @@ var getForecast = function (data) {
     }
 }
 
+// save searched cities to localStorage
 var saveCities = function () {
     localStorage.setItem("cities", JSON.stringify(cities));
+}
+
+var loadCities = function () {
+    var savedCities = JSON.parse(localStorage.getItem("cities"));
+
+    if (!savedCities) {
+        savedCities = [];
+    }
+
+    for (var i = 0; i < savedCities.length; i++) {
+        var city = savedCities[i];
+
+        // create button for each city that was in localStorage
+        addHistoricalSearch(city);
+    }
+
+    cities = savedCities;
 }
 
 searchFormEl.addEventListener("submit", formSubmitHandler);
@@ -179,5 +200,7 @@ historicalSearchesEl.addEventListener("click", function (event) {
     getCityCoords(city);
 
 })
+
+loadCities();
 
 // getCityCoords("Houston");
