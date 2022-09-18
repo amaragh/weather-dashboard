@@ -18,33 +18,53 @@
     <header>
         <h1 class="display-3">Weather Dashboard</h1>
     </header>
-    <main class="container">
+    <main class="container d-flex w-100">
         <!-- search form and historical searches -->
-        <div class="row">
-            <!-- input form to collect city name -->
-            <div class="col-3">
-                <h3>Search for a City:</h3>
-                <form id="search-form">
-                    <input type="text" name="city" id="city" placeholder="Houston" />
-                    <button class="btn" type="submit">Submit</button>
-                </form>
-            </div>
-            <!-- section to display historical searches -->
-            <div>
+        <section class="row">
+            <div class="col-12 col-md-3">
+                <!-- input form to collect city name -->
+                <div>
+                    <h3>Search for a City:</h3>
+                    <form id="search-form">
+                        <input type="text" name="city" id="city" placeholder="Houston" />
+                        <button class="btn" type="submit">Submit</button>
+                    </form>
+                </div>
+                <!-- section to display historical searches -->
+                <div>
 
+                </div>
             </div>
-        </div>
-        <!-- forecast display -->
-        <div class="row">
-            <!-- current day weather -->
-            <div class="current-weather col-9">
+            <!-- forecast display -->
+            <div class="col-12 col-md-9">
+                <!-- current day weather -->
+                <div class="current-weather">
+                    <div>
+                        <h3 id="city-name"></h3>
+                        <span id="current-date"></span>
+                        <img href="" class="weather-icon"></img>
+                        <div>
+                            <ul id="current-weather-details">
+                                <li id="current-temp"></li>
+                                <li id="current-wind"></li>
+                                 <li id="current-humid"></li>
+                                
+
+                            </ul>
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
             <!-- 5 day forecast container -->
             <div class="forecast-weather col-9">
 
             </div>
-        </div>
+            </div>
+        </section>
+
     </main>
 
 
