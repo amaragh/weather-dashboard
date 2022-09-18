@@ -2,7 +2,7 @@ var searchFormEl = document.querySelector("#search-form");
 var cityInputEl = document.querySelector("#city");
 
 var cityNameEl = document.querySelector("#city-name");
-var currentDateEl =  document.querySelector("#current-date");
+var currentDateEl = document.querySelector("#current-date");
 var weatherIconEl = document.querySelector(".weather-icon");
 
 var currentTempEl = document.querySelector("#current-temp");
@@ -23,7 +23,7 @@ var getCityCoords = function (city) {
                 // function to extract current day weather
                 getCurrentWeather(data);
                 // function to call other api with the coordinates as query parameters
-                getForecast(latitude, longitude);
+                callForecastApi(latitude, longitude);
 
             })
         } else {
@@ -48,7 +48,7 @@ var formSubmitHandler = function (event) {
 }
 
 var getCurrentWeather = function (data) {
-    console.log("get current weather");
+    // console.log("get current weather");
 
     var city = data.name;
     var weather = data.weather[0].id;
@@ -63,17 +63,46 @@ var getCurrentWeather = function (data) {
     currentDateEl.textContent = date;
     weatherIconEl.setAttribute("href", "./assets/images/800.png");
 
-    currentTempEl. textContent = "Temp = " + temperature + "°F";
+    currentTempEl.textContent = "Temp = " + temperature + "°F";
     currentWindEl.textContent = "Wind = " + windSpeed + " MPH";
-    currentHumidEl. textContent = "Humidity = " + humidity + "%";
+    currentHumidEl.textContent = "Humidity = " + humidity + "%";
 
-    console.log(city, weather, temperature, humidity, windSpeed);
+    // console.log(city, weather, temperature, humidity, windSpeed);
 
 
 };
 
-var getForecast = function (latitude, longitude) {
+var callForecastApi = function (latitude, longitude) {
     console.log("latitude", latitude, "longitude", longitude);
+
+    var apiUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&appid=718908fbd7f74c0aac0bd0ff69325a23&units=imperial";
+    console.log(apiUrl);
+
+    fetch(apiUrl).then(function (response) {
+        if (response.ok) {
+            response.json().then(function (data) {
+                getForecast(data);
+            })
+        } else {
+            alert("There was an error retrieving data for this city.")
+        }
+    })
+}
+
+var getForecast = function(data) {
+    // the api returns 8 timestamps for each of the 5 days. Each number in the array represents 3PM for each fo the 5 days
+    var indices = [3, 11,19, 27, 35];
+
+    for (var i = 0; i < indices.length; i++) {
+        var index = indices[i];
+
+        var date = data.list[index].dt;
+        console.log(date);
+        // new Date(data.dt * 1000).toLocaleDateString("en-US");
+
+
+
+    }
 }
 
 searchFormEl.addEventListener("submit", formSubmitHandler);
