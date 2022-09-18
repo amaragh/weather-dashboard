@@ -31,24 +31,21 @@ var getCityCoords = function (city) {
                 // function to call other api with the coordinates as query parameters
                 callForecastApi(latitude, longitude);
 
+
             })
         } else {
             alert("Error: City Not Found. Please enter a valid city name.")
         }
-        cities.push(city);
-        addHistoricalSearch(city);
-        saveCities();
+
+
     });
+    cities.push(city);
+
+    addHistoricalSearch(city);
+
+    saveCities();
 };
 
-var addHistoricalSearch = function(city) {
-    console.log("historical searches");
-    var historicalBtnEl = document.createElement("button")
-    // historicalBtnEl.setAttribute("id", city);
-    historicalBtnEl.textContent = city;
-    historicalSearchesEl.insertBefore(historicalBtnEl, historicalSearchesEl.firstChild);
-    console.log(historicalSearchesEl);
-}
 
 var formSubmitHandler = function (event) {
     event.preventDefault();
@@ -64,6 +61,21 @@ var formSubmitHandler = function (event) {
     }
 
 }
+var addHistoricalSearch = function (city) {
+    console.log("historical searches");
+    
+    var cityId = city.replace(" ", "-");
+    var existingBtnEl = document.querySelector(`#${cityId}`);
+
+    if (!existingBtnEl) {
+        var historicalBtnEl = document.createElement("button")
+        historicalBtnEl.setAttribute("id", cityId);
+        historicalBtnEl.textContent = city;
+        historicalSearchesEl.insertBefore(historicalBtnEl, historicalSearchesEl.firstChild);
+    }
+
+    console.log(historicalSearchesEl);
+}
 
 var getCurrentWeather = function (data) {
     // console.log("get current weather");
@@ -77,7 +89,7 @@ var getCurrentWeather = function (data) {
     // convert unix timecode to today's date in US format
     var date = new Date(data.dt * 1000).toLocaleDateString("en-US");
 
-    cityNameEl.textContent = city + " " + date ;
+    cityNameEl.textContent = city + " " + date;
     // currentDateEl.textContent = date;
     weatherIconEl.setAttribute("href", "./assets/images/800.png");
 
@@ -108,7 +120,9 @@ var callForecastApi = function (latitude, longitude) {
 }
 
 var getForecast = function (data) {
+    // clear any forecast data, if present
     forecastContainerEl.innerHTML = "";
+
     // The api returns 8 timestamps, 3 hours apart, for each of the 5 days. 
     // Each number in the array represents 3PM for each of the 5 days
     var indices = [3, 11, 19, 27, 35];
@@ -127,11 +141,11 @@ var getForecast = function (data) {
 
         var dateEl = document.createElement("p");
         dateEl.textContent = date;
-        
+
 
         var weatherEl = document.createElement("p");
         // weatherIconEl.setAttribute("href", "./assets/images/800.png");
-        
+
         var tempEl = document.createElement("p");
         tempEl.textContent = "Temp = " + temperature + "°F";
 
@@ -148,17 +162,22 @@ var getForecast = function (data) {
         forecastDayEl.appendChild(windEl);
         forecastDayEl.appendChild(humidEl);
 
-
         forecastContainerEl.appendChild(forecastDayEl);
-
 
     }
 }
 
-var saveCities = function() {
+var saveCities = function () {
     localStorage.setItem("cities", JSON.stringify(cities));
 }
 
 searchFormEl.addEventListener("submit", formSubmitHandler);
+
+historicalSearchesEl.addEventListener("click", function (event) {
+    var city = event.target.textContent;
+    console.log(city);
+    getCityCoords(city);
+
+})
 
 // getCityCoords("Houston");
