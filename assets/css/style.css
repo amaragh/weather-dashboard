@@ -9,7 +9,6 @@
     padding: 0;
 }
 
-
 header {
     background-color: var(--dark-color);
     margin: 5px;
@@ -70,12 +69,10 @@ button {
 #city-name {
     display: inline;
     font-weight: bold;
-    /* padding-right: 5px; */
 }
 
 .weather-icon {
     padding-bottom: 10px;
-
 }
 
 #forecast-container {
@@ -85,10 +82,7 @@ button {
 .forecast-day {
     background-color: var(--forecast-color);
     color: white;
-    /* margin-right: 5px; */
     padding: 10px;
-    /* padding-left: 0;
-    padding-right: 0; */
     margin-left: 15px;
     margin-right: 15px;
     margin-bottom: 15px;
@@ -154,7 +148,6 @@ button {
         margin-left: 5px;
         margin-right: 5px;
         margin-bottom: 15px;
-        /* width: fit-content; */
         line-height: 1;
     }
 }
