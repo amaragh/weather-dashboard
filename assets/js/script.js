@@ -22,14 +22,13 @@ var cities = [];
 
 // function to get city coordinates
 var getCityCoords = function (city) {
-    var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=718908fbd7f74c0aac0bd0ff69325a23&units=metric";
+    var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=718908fbd7f74c0aac0bd0ff69325a23&units=imperial";
 
     fetch(apiUrl).then(function (response) {
         if (response.ok) {
             response.json().then(function (data) {
                 var latitude = data.coord.lat;
                 var longitude = data.coord.lon;
-
 
                 // function to extract current day weather
                 getCurrentWeather(data);
@@ -50,12 +49,7 @@ var getCityCoords = function (city) {
         } else {
             alert("Error: City Not Found. Please enter a valid city name.")
         }
-
-
     });
-
-
-
 };
 
 
@@ -73,6 +67,8 @@ var formSubmitHandler = function (event) {
     }
 
 }
+
+// function to add buttons below input form for histirical city searches
 var addHistoricalSearch = function (city) {
 
     var cityId = city.replace(" ", "-");
@@ -86,12 +82,10 @@ var addHistoricalSearch = function (city) {
         historicalBtnEl.classList = "rounded";
         // add new button as first child so it appears as the first button in the historical search list
         historicalSearchesEl.insertBefore(historicalBtnEl, historicalSearchesEl.firstChild);
-
     }
 }
 
-
-
+//  function to extract current weather for given city
 var getCurrentWeather = function (data) {
 
     var city = data.name;
@@ -117,6 +111,7 @@ var getCurrentWeather = function (data) {
 
 };
 
+//  function to call API for 5 day forecast
 var callForecastApi = function (latitude, longitude) {
 
     var apiUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&appid=718908fbd7f74c0aac0bd0ff69325a23&units=imperial";
@@ -132,6 +127,7 @@ var callForecastApi = function (latitude, longitude) {
     })
 }
 
+// function to extract 5 day forecast details from API data
 var getForecast = function (data) {
     // clear any forecast data, if present
     forecastContainerEl.innerHTML = "";
@@ -151,7 +147,6 @@ var getForecast = function (data) {
 
         var forecastDayEl = document.createElement("div");
         forecastDayEl.classList = "col forecast-day"
-        // $(forecastDayEl).addClass("col");
 
         var dateEl = document.createElement("p");
         dateEl.textContent = date;
@@ -184,6 +179,7 @@ var getForecast = function (data) {
     forecastContainerParentEl.setAttribute("style", "display:'';");
 }
 
+// class value for icon display depending on weather type from API response
 var getWeatherClass = function (weather) {
     switch (weather) {
         case "Clear":
@@ -214,6 +210,7 @@ var saveCities = function () {
     localStorage.setItem("cities", JSON.stringify(cities));
 }
 
+// load saved searched cities from localStorage
 var loadCities = function () {
     var savedCities = JSON.parse(localStorage.getItem("cities"));
 
@@ -233,7 +230,7 @@ var loadCities = function () {
 
 searchFormEl.addEventListener("submit", formSubmitHandler);
 
-historicalSearchesEl.addEventListener("click", function (event) {
+$(historicalSearchesEl).on("click", "button", function (event) {
     var city = event.target.textContent;
     getCityCoords(city);
 })
