@@ -125,3 +125,37 @@ button {
     color: white;
 }
 
+/* MEDIA QUERY FOR TABLETS AND SMALLER */
+
+@media screen and (max-width: 768px) {
+    .current-weather {
+        margin-top: 20px;
+    }
+}
+
+/* MEDIA QUERY FOR MOBILE PHONES AND SMALLER */
+
+@media screen and (max-width: 575px) {
+
+    #historical-searches button {
+        margin-top: 6px;
+        padding: 2px;    
+    }
+
+    .current-weather {
+        margin-top: 20px;
+    }
+
+    #forecast-weather {
+        display: flex;
+    }
+
+    .forecast-day {
+        margin-left: 5px;
+        margin-right: 5px;
+        margin-bottom: 15px;
+        /* width: fit-content; */
+        line-height: 1;
+    }
+}
+
