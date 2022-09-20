@@ -79,7 +79,7 @@ var addHistoricalSearch = function (city) {
         var historicalBtnEl = document.createElement("button")
         historicalBtnEl.textContent = city;
         historicalBtnEl.setAttribute("id", cityId);
-        historicalBtnEl.classList = "rounded";
+        historicalBtnEl.classList = "rounded historical";
         // add new button as first child so it appears as the first button in the historical search list
         historicalSearchesEl.insertBefore(historicalBtnEl, historicalSearchesEl.firstChild);
     }
@@ -234,6 +234,16 @@ $(historicalSearchesEl).on("click", "button", function (event) {
     var city = event.target.textContent;
     getCityCoords(city);
 })
+
+// Saving the below as an example for future purposes
+// historicalSearchesEl.addEventListener("click", function (event) {
+//     if (event.target.className == "rounded historical") {
+//         var city = event.target.textContent;
+//         getCityCoords(city);
+//     } else {
+//         return;
+//     }
+// })
 
 // when page is opened, load historical searches as available buttons
 loadCities();
